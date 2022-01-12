@@ -4,37 +4,38 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'rust-hwid'",
+            "name": "Debug executable 'hwpass'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=rust-hwid",
-                    "--package=rust-hwid"
+                    "--bin=hwpass",
+                    "--package=hwpass"
                 ],
                 "filter": {
-                    "name": "rust-hwid",
+                    "name": "hwpass",
                     "kind": "bin"
                 }
             },
-            "args": ["--encrypt"],
+            "args": [],
             "cwd": "${workspaceFolder}"
         },
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'rust-hwid'",
+            "name": "Debug unit tests in executable 'hwpass'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=rust-hwid",
-                    "--package=rust-hwid"
+                    "--bin=hwpass",
+                    "--package=hwpass"
                 ],
                 "filter": {
-                    "name": "rust-hwid",
+                    "name": "hwpass",
                     "kind": "bin"
                 }
             },
