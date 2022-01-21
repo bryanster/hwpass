@@ -7,9 +7,6 @@ use std::fs::File;
 use enc_file::{encrypt_chacha, decrypt_chacha};
 use std::str;
 
-fn print_type_of<T>(_: &T) {
-    println!("{}", std::any::type_name::<T>())
-}
 fn get_id() -> String { 
     let mut id = Path::new("/var/lib/dbus/machine-id").exists();
     if id == false {
@@ -23,7 +20,10 @@ fn get_id() -> String {
         }
     }
     else {
-        let hwid = fs::read_to_string("/var/lib/dbus/machine-id").expect("Unable to read file");
+        let mut hwid = fs::read_to_string("/var/lib/dbus/machine-id").expect("Unable to read file");
+        if hwid.ends_with('\n') {
+            hwid.pop();
+        }
         return hwid
     }}
 
@@ -48,23 +48,18 @@ fn main() {
         if args[1] == "-e" || args[1] == "--encrypt" {
             let text = b"This a test";
             let keyraw: String = get_id();
-            print_type_of(&keyraw);
             let key: &str=  &keyraw.as_str();
-            // let key: &str = "d865b73356cc41de9ccad49775eb377a";
             let text_vec = text.to_vec();
             let ciphertext = encrypt_chacha(text_vec, key).unwrap();
-
-
             let mut f = File::create("output.enc").expect("Unable to create file");                                                                                                                                                                                                                                                                     
             f.write_all(&ciphertext).expect("Unable to write data");                                                                                                                                                                                                                                                                                                       
-
-
-            
+   
 
         }
         if args[1] == "-d" || args[1] == "--decrypt" {
             let ciphertext = get_file_as_byte_vec("output.enc");
-            let key: &str =  "d865b73356cc41de9ccad49775eb377a";
+            let keyraw: String = get_id();
+            let key: &str=  &keyraw.as_str();
             let plaintextvec = decrypt_chacha(ciphertext, key).unwrap();
             let plaintext = str::from_utf8(&plaintextvec).unwrap();
             println!("{}", plaintext);
